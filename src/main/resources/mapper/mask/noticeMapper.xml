@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jungjoongi.batch.mask.dao.NoticeDao">
+
+    <select id="selectNoticeListWithMail" resultType="com.jungjoongi.batch.mask.dto.NoticeDto">
+            SELECT seq, noti_title, noti_content, use_yn
+            from notice_tb
+            where noti_type = 1
+            and use_yn ='Y'
+            order by mod_date desc
+            limit 1;
+    </select>
+
+
+
+</mapper>

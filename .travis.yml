@@ -1,0 +1,23 @@
+language: java
+jdk: "-openjdk11"
+branches:
+  only:
+  - master
+before_install:
+- sudo apt-get install expect
+- openssl aes-256-cbc -K $encrypted_70ff082a7eeb_key -iv $encrypted_70ff082a7eeb_iv -in deploy.sh.enc -out deploy.sh -d
+- openssl aes-256-cbc -K $encrypted_2676759ab6fe_key -iv $encrypted_2676759ab6fe_iv -in ./src/main/resources/application.properties.enc -out ./src/main/resources/application.properties -d
+- chmod +x gradlew
+- chmod +x deploy.sh
+-
+cache:
+  directories:
+  - "$HOME/.m2/repository"
+  - "$home/.gradle"
+script: "./deploy.sh"
+after_script: "./gradlew clean build"
+
+notifications:
+  email:
+    recipients:
+    - dev.joongi@gmail.com
