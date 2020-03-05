@@ -11,6 +11,7 @@ import com.jungjoongi.batch.mask.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -28,6 +29,8 @@ public class MailServiceImpl implements MailService {
     private UserDao userDao;
     private NoticeDao noticeDao;
     private JobUserDao jobUserDao;
+    @Value("${spring.profile.value}")
+    private String profile;
 
     MailServiceImpl(UserDao userDao, NoticeDao noticeDao, JobUserDao jobUserDao) {
         this.userDao = userDao;
@@ -51,7 +54,12 @@ public class MailServiceImpl implements MailService {
         JobUserDto jobUserDto = new JobUserDto();
         jobUserDto.setSendType(1);
 
-        List<UserDto> userDtoList = this.getUserList();
+        UserDto userDto = new UserDto();
+        userDto.setProfile(profile);
+
+        List<UserDto> userDtoList = this.getUserList(userDto);
+        log.info("profile->"+profile);
+        log.info("list-->"+userDtoList);
         List<JobUserDto> jobUserDtoList = this.selectJobUserList(jobUserDto);
         NoticeDto noticeDto = noticeDao.selectNoticeListWithMail();
         /** DAO SELECT 선언 e */
@@ -86,9 +94,9 @@ public class MailServiceImpl implements MailService {
         for(UserDto list : userDtoList) {
             MimeMessage message = new MimeMessage(session);
             message.setSentDate(new Date());
-            message.setFrom(new InternetAddress("dev.joongi@gmail.com", "dev.정준기"));
+            message.setFrom(new InternetAddress(jobUserDtoList.get(0).getEmail(), "마스커마스커"));
 
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(list.getEmail(), "user"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(list.getEmail(), ""));
             message.setSubject(title, "UTF-8");
             message.setText(content, "UTF-8");
 
@@ -98,8 +106,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public List<UserDto> getUserList() {
-        return userDao.selectUserList();
+    public List<UserDto> getUserList(UserDto userDto) {
+        return userDao.selectUserList(userDto);
     }
 
     @Override

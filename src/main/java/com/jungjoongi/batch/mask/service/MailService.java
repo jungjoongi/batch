@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MailService {
     void sendEmail(List<SiteResDto> CrawlingList);
-    List<UserDto> getUserList();
+    List<UserDto> getUserList(UserDto userDto);
     List<JobUserDto> selectJobUserList(JobUserDto jobUserDto);
 }

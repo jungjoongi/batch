@@ -16,5 +16,6 @@ public class UserDto {
     private String regDate;
     private String modDate;
     private String sendType;
+    private String profile;
 
 }

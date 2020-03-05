@@ -8,6 +8,6 @@ import java.util.List;
 @Component
 public interface UserDao {
 
-    List<UserDto> selectUserList();
+    List<UserDto> selectUserList(UserDto userDto);
 
 }

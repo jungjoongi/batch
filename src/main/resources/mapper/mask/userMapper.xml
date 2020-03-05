@@ -8,6 +8,7 @@
     <select id="selectUserList" resultType="com.jungjoongi.batch.mask.dto.UserDto">
         SELECT seq, email, sms_no, agree_yn, send_type, reg_date, mod_date, kakao_id
         FROM maskpush.user_tb
+        where profile = #{profile}
     </select>
 
 

@@ -8,6 +8,7 @@ import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +20,15 @@ public class MaskJob extends QuartzJobBean implements InterruptableJob {
 
     private CrawlingService crawlingService;
     private MailService mailService;
+    @Value("${spring.profile.value}")
+    private String profile;
 
     MaskJob(CrawlingService crawlingService, MailService mailService) {
         this.crawlingService = crawlingService;
         this.mailService = mailService;
     }
+
+
 
     @Override
     public void interrupt() throws UnableToInterruptJobException {
@@ -32,7 +37,10 @@ public class MaskJob extends QuartzJobBean implements InterruptableJob {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+
         List<SiteResDto> CrawlingList = crawlingService.executeCrawling();
+
+        log.info("profile ---> "+profile);
         if (CrawlingList != null) {
             mailService.sendEmail(CrawlingList);
         }
