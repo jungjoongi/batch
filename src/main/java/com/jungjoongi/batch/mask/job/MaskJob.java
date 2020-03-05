@@ -20,8 +20,6 @@ public class MaskJob extends QuartzJobBean implements InterruptableJob {
 
     private CrawlingService crawlingService;
     private MailService mailService;
-    @Value("${spring.profile.value}")
-    private String profile;
 
     MaskJob(CrawlingService crawlingService, MailService mailService) {
         this.crawlingService = crawlingService;
@@ -40,7 +38,6 @@ public class MaskJob extends QuartzJobBean implements InterruptableJob {
 
         List<SiteResDto> CrawlingList = crawlingService.executeCrawling();
 
-        log.info("profile ---> "+profile);
         if (CrawlingList != null) {
             mailService.sendEmail(CrawlingList);
         }
