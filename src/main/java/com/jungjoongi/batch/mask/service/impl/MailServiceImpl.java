@@ -58,7 +58,6 @@ public class MailServiceImpl implements MailService {
         userDto.setProfile(profile);
 
         List<UserDto> userDtoList = this.getUserList(userDto);
-        log.info("profile->"+profile);
         log.info("list-->"+userDtoList);
         List<JobUserDto> jobUserDtoList = this.selectJobUserList(jobUserDto);
         NoticeDto noticeDto = noticeDao.selectNoticeListWithMail();
