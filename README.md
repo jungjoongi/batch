@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jungjoongi/maskBatch.svg?branch=master)](https://travis-ci.org/jungjoongi/maskBatch)
 # 마스크 특가 알리미 배치 프로그램
 
 ## 설명
