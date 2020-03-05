@@ -1,7 +1,9 @@
 package com.jungjoongi.batch.mask.service.impl;
 
+import com.jungjoongi.batch.mask.dao.JobUserDao;
 import com.jungjoongi.batch.mask.dao.NoticeDao;
 import com.jungjoongi.batch.mask.dao.UserDao;
+import com.jungjoongi.batch.mask.dto.JobUserDto;
 import com.jungjoongi.batch.mask.dto.NoticeDto;
 import com.jungjoongi.batch.mask.dto.SiteResDto;
 import com.jungjoongi.batch.mask.dto.UserDto;
@@ -25,10 +27,12 @@ public class MailServiceImpl implements MailService {
     private final static Logger LOGGER = LogManager.getLogger(CrawlingServiceImpl.class);
     private UserDao userDao;
     private NoticeDao noticeDao;
+    private JobUserDao jobUserDao;
 
-    MailServiceImpl(UserDao userDao, NoticeDao noticeDao) {
+    MailServiceImpl(UserDao userDao, NoticeDao noticeDao, JobUserDao jobUserDao) {
         this.userDao = userDao;
         this.noticeDao = noticeDao;
+        this.jobUserDao = jobUserDao;
     }
 
     @Override
@@ -43,14 +47,24 @@ public class MailServiceImpl implements MailService {
     }
 
     public void send(List<SiteResDto> CrawlingList) throws Exception {
+        /** DAO SELECT 선언 s */
+        JobUserDto jobUserDto = new JobUserDto();
+        jobUserDto.setSendType(1);
+
         List<UserDto> userDtoList = this.getUserList();
+        List<JobUserDto> jobUserDtoList = this.selectJobUserList(jobUserDto);
         NoticeDto noticeDto = noticeDao.selectNoticeListWithMail();
+        /** DAO SELECT 선언 e */
+
+        /** 컨텐츠 부분 선언 s */
         Date date = new Date();
         SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String nowTime = simpleDateFormat.format(date);
         String title = noticeDto.getNotiTitle().replace("$date$", nowTime);
         StringBuffer contentSb = new StringBuffer();
         String content = "";
+        /** 컨텐츠 부분 선언 e */
+
         for (SiteResDto list : CrawlingList) {
                 contentSb.append("[사이트명]\n").append(list.getSiteNm()).append("\n")
                 .append("[주소]\n").append(list.getSiteUrl()).append("\n");
@@ -66,7 +80,7 @@ public class MailServiceImpl implements MailService {
         Session session = Session.getDefaultInstance(prop, new Authenticator(){
             @Override
             public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("dev.joongi@gmail.com", "Zxc@046818"); //   발송자 ID 및 possword
+                return new PasswordAuthentication(jobUserDtoList.get(0).getEmail(), jobUserDtoList.get(0).getEmailPw()); //   발송자 ID 및 possword
             }
         });
         for(UserDto list : userDtoList) {
@@ -86,5 +100,10 @@ public class MailServiceImpl implements MailService {
     @Override
     public List<UserDto> getUserList() {
         return userDao.selectUserList();
+    }
+
+    @Override
+    public List<JobUserDto> selectJobUserList(JobUserDto jobUserDto) {
+        return jobUserDao.selectJobUserList(jobUserDto);
     }
 }

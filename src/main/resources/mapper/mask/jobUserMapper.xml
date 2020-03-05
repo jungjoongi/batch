@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jungjoongi.batch.mask.dao.JobUserDao">
+
+    <select id="selectJobUserList" resultType="com.jungjoongi.batch.mask.dto.JobUserDto">
+        SELECT seq, alias, send_type, email, sms_no, kakao_id, reg_date, mod_date, email_pw, birth, kakao_pw, use_yn
+        FROM maskpush.job_user_tb
+        where use_yn = 'Y'
+        and send_type = #{sendType}
+    </select>
+
+
+
+</mapper>

@@ -58,6 +58,7 @@ public class CrawlingServiceImpl implements CrawlingService {
                     );
                     if(!list.getContent().equals(content)) {
                         list.setContent(content);
+                        list.setUpdateYn("Y");
                         updateList.add(list);
                     }
                 } catch (IOException e) {
@@ -75,5 +76,4 @@ public class CrawlingServiceImpl implements CrawlingService {
             return null;
         }
     }
-
 }

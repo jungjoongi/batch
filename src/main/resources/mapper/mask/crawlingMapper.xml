@@ -13,7 +13,7 @@
     <update id="updateSite" parameterType="java.util.List">
         <foreach collection="list" item="list" index="index" separator=";">
             update site_list_tb
-            set update_yn = 'Y', content = #{list.content}, mod_date = now()
+            set update_yn = #{list.updateYn}, content = #{list.content}, mod_date = now()
             where #{list.seq}
         </foreach>
     </update>
