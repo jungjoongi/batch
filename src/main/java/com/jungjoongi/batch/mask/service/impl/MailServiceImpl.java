@@ -70,11 +70,23 @@ public class MailServiceImpl implements MailService {
         String title = noticeDto.getNotiTitle().replace("$date$", nowTime);
         StringBuffer contentSb = new StringBuffer();
         String content = "";
+        String[] hotDealArr = null;
         /** 컨텐츠 부분 선언 e */
 
         for (SiteResDto list : CrawlingList) {
+            if(list.getContentType() == 2) {
+                contentSb.append("[핫딜] :: ");
+                hotDealArr = list.getSiteContent().split(" ");
+
+                if(hotDealArr != null && hotDealArr.length == 8) {
+                    contentSb.append("품절");
+                } else if (hotDealArr != null && hotDealArr.length < 8 && hotDealArr.length > 0) {
+                    contentSb.append("전시중인 상품 : "+ (8 - hotDealArr.length)+" 개\n");
+                }
+            }
                 contentSb.append("[사이트명]\n").append(list.getSiteNm()).append("\n")
                 .append("[주소]\n").append(list.getSiteUrl()).append("\n");
+
         }
         content = noticeDto.getNotiContent().replace("$content$", contentSb.toString());
 

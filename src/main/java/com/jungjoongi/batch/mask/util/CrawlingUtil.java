@@ -6,7 +6,9 @@ public class CrawlingUtil {
 
     public static String parseGateway(int type, Elements elements, String flag) {
         String parseData = "";
-        if (type == 1) {
+        if (type == 0) {
+            parseData = elements.text();
+        } else if (type == 1) {
             parseData = parseWithSplit(elements, flag);
         }
         return parseData;
@@ -16,5 +18,7 @@ public class CrawlingUtil {
         String parseData = elements.text().split(flag)[0];
         return parseData;
     }
+
+
 
 }

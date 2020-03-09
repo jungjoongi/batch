@@ -6,15 +6,16 @@
 <mapper namespace="com.jungjoongi.batch.mask.dao.CrawlingDao">
 
     <select id="selectSiteList" resultType="com.jungjoongi.batch.mask.dto.SiteResDto">
-        select seq, site_nm, content, update_yn, reg_date, mod_date, site_url, content_element, use_yn, parse_type, parse_flag
+        select seq, site_nm, site_content, update_yn, reg_date, mod_date, site_url, content_element, use_yn, parse_type, parse_flag, content_type
         from site_list_tb
+        where use_yn = 'Y'
     </select>
 
     <update id="updateSite" parameterType="java.util.List">
         <foreach collection="list" item="list" index="index" separator=";">
-            update site_list_tb
-            set update_yn = #{list.updateYn}, content = #{list.content}, mod_date = now()
-            where #{list.seq}
+           update site_list_tb
+            set update_yn = #{list.updateYn}, site_content = #{list.siteContent}, mod_date = now()
+            where seq = #{list.seq}
         </foreach>
     </update>
 

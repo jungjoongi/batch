@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SiteResDto {
     private int seq;
     private String siteNm;
-    private String content;
+    private String siteContent;
     private String updateYn;
     private String regDate;
     private String modDate;
@@ -20,4 +20,5 @@ public class SiteResDto {
     private String useYn;
     private int parseType;
     private String parseFlag;
+    private int contentType;
 }

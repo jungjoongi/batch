@@ -46,30 +46,32 @@ public class CrawlingServiceImpl implements CrawlingService {
         List<SiteResDto> updateList = new ArrayList<SiteResDto>();
 
         Document doc = null;
-        for (SiteResDto list :  siteResDtoList) {
-            if(list.getUseYn().equals("Y")) {
-                try {
-                    doc = Jsoup.connect(list.getSiteUrl()).get();
 
-                    String content = CrawlingUtil.parseGateway(
-                            list.getParseType(),
-                            doc.select(list.getContentElement()),
-                            list.getParseFlag()
-                    );
-                    if(!list.getContent().equals(content)) {
-                        list.setContent(content);
-                        list.setUpdateYn("Y");
-                        updateList.add(list);
-                    }
-                } catch (IOException e) {
-                    log.info(e.getMessage());
-                } finally {
-                    doc = null;
+        for (SiteResDto list :  siteResDtoList) {
+            try {
+                doc = Jsoup.connect(list.getSiteUrl()).get();
+                String content = CrawlingUtil.parseGateway(
+                        list.getParseType(),
+                        doc.select(list.getContentElement()),
+                        list.getParseFlag()
+                );
+                if(!list.getSiteContent().equals(content)) {
+                    log.info("listContent :: "+list.getSiteContent() +
+                            "\nContent :: "+content +
+                            "\n list" + list);
+                    list.setSiteContent(content);
+                    list.setUpdateYn("Y");
+                    updateList.add(list);
                 }
+            } catch (IOException e) {
+                log.info(e.getMessage());
+            } finally {
+                doc = null;
             }
         }
 
         if(updateList.size() > 0) {
+            log.info("updqate ==>"+updateList);
             this.updateSite(updateList);
             return updateList;
         } else {
