@@ -23,7 +23,7 @@ public class ScheduleJob {
     public void start() {
         JobDetail maskJobDetail = buildJobDetail(MaskJob.class, "maskJob", "job", new HashMap());
         try {
-            scheduler.scheduleJob(maskJobDetail, buildJobTrigger("0 0/1 * * * ?")); // 매 1분마다 스케줄 등록
+            scheduler.scheduleJob(maskJobDetail, buildJobTrigger("0/1 * * * * ?")); // 매 1분마다 스케줄 등록
         } catch (SchedulerException e) {
             log.info(e.getMessage());
         }
